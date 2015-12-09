@@ -1,6 +1,47 @@
 doctype xml
 
 document
-  catalogTemplate
+  head
+    style= require('./styles.styl')
+
+  stackTemplate
+
+    //- We put an empty banner here to prevent the carousel from being
+    //- too high up and offscreen too much.
     banner
-      title ABC iView
+
+    collectionList
+
+      carousel
+        section
+          each item in carousels[1].episodes
+            lockup
+              img.carouselImage(src=item.thumbnail width="1500" height="600")
+
+              overlay
+                if item.title
+                  title.carouselSubtitle= item.seriesTitle
+                  title.carouselTitle= item.title
+                else
+                  title.carouselTitle= item.seriesTitle
+
+
+      each shelf in collections
+        shelf.shelf
+          header
+            title= shelf.title
+
+          section
+            each item in shelf.episodes
+              lockup
+                img(src=item.thumbnail width="455" height="256")
+
+                if item.title
+                  title.cardSubtitle= item.seriesTitle
+                  title.cardTitle= item.title
+                else
+                  title.cardTitle= item.seriesTitle
+
+                //- We make an empty title and give it a height to add
+                //- slightly more padding between the shelves
+                title.shelfSpacer= ' '
