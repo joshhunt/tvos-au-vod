@@ -1,4 +1,5 @@
 import router from './index';
+import { PRIVATE } from './standardMiddleware';
 
 export default function routeEventListener(event) {
   const ele = event.target;

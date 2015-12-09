@@ -14,6 +14,7 @@ const router = (...args) => {
 };
 
 router.goTo = (route, context = {}) => {
+  router.currentLocation = route;
   page(route, context);
 };
 

@@ -2,6 +2,7 @@ import http from 'http';
 import path from 'path';
 import nodeStatic from 'node-static';
 
+const port = 8123;
 const root = path.resolve(__dirname);
 const srcRoot = path.resolve(root, 'src');
 const distRoot = path.resolve(root, 'dist');
@@ -21,7 +22,7 @@ module.exports = {
   output: {
     path: distRoot,
     filename: 'bundle.js',
-    publicPath: `http://localhost:8123/`,
+    publicPath: `http://localhost:${port}/`,
   },
 
   module: {
@@ -62,9 +63,9 @@ module.exports = {
   },
 
   plugins: [
-    function() {
-      this.plugin('compile', x => io.emit('compile'));
-      this.plugin('done', x => io.emit('live-reload'));
+    function () {
+      this.plugin('compile', () => io.emit('compile'));
+      this.plugin('done', () => io.emit('live-reload'));
     },
   ],
 
@@ -79,21 +80,15 @@ const server = http.createServer((req, res) => {
   req.addListener('end', file.serve.bind(file, req, res)).resume();
 });
 
-server.listen(8123, () => {
-  console.log('Server started');
+server.listen(port, () => {
+  console.log(` ==> Development server started on http://localhost:${port}`);
 });
 
 io = require('socket.io')(server);
 io.serveClient(false);
 
 io.on('connection', (socket) => {
-  console.log('socket.io connection');
+  console.log('[livereload] Client connected');
 
-  socket.on('event', (data) => {
-    console.log('socket.io data:', data);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('socket.io disconnect');
-  });
+  socket.on('disconnect', () => console.log('[livereload] Client disconnected'));
 });

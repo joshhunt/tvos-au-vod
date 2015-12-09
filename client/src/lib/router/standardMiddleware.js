@@ -1,8 +1,8 @@
 /* globals navigationDocument */
 import routeEventListener from './eventListener';
 
-const PRIVATE = Symbol('sssh, private!');
-const MENU_ITEM = 'menuItem';
+export const PRIVATE = Symbol('sssh, private!');
+export const MENU_ITEM = 'menuItem';
 
 function presentDocument(doc) {
   // Let every select and play event bubble up to the root of the document,
