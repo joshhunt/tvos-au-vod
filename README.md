@@ -31,3 +31,5 @@ npm start
 ```
 
 And build the native Swift host app into the simulator and it should all work.
+
+Note: This project uses API's from an Australia catchup TV video-on-demand service, which may or may not be geoblocked. 
