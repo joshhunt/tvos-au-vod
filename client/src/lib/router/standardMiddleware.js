@@ -44,6 +44,15 @@ export default function standardMiddleware(ctx, next) {
   if (ctx.event && ctx.event.target.nodeName === MENU_ITEM) {
     const menuItem = ctx.event.target;
     const menuFeature = menuItem.parentNode.getFeature('MenuBarDocument');
+
+    const currentDocForItem = menuFeature.getDocument(menuItem);
+
+    // There's already an active document for this menu item, so we don't
+    // want to run the view again - just recycle the current one
+    if (currentDocForItem) {
+      return;
+    }
+
     ctx.present = presentDocument.bind({ menuItem, menuFeature, context: ctx });
   }
 
