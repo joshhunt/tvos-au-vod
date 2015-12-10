@@ -1,0 +1,60 @@
+doctype xml
+
+- var durationInMinutes = Math.ceil(duration / 60);
+
+document
+  head
+    style= require('./styles.styl')
+
+  productTemplate
+    banner
+      heroImg(src=thumbnail)
+
+      infoList
+        info
+          header
+            title Channel
+          text= channelTitle
+
+        info
+          header
+            title Duration
+          text= durationInMinutes + ' minutes'
+
+        info
+          header
+            title Rating
+          text= rating
+
+      stack
+        title= seriesTitle + ': ' + title
+        row
+          text= availability
+
+        description(allowsZooming="true")= description
+
+        row
+          buttonLockup
+            badge(src="resource://button-play")
+            title Play
+
+    each shelf in related
+      shelf.shelf
+        header
+          title= shelf.title
+
+        section
+          each item in shelf.episodes
+            lockup(route='/' + item.href)
+              img(src=item.thumbnail width="455" height="256")
+
+              if item.title
+                title.cardSubtitle= item.seriesTitle
+                title.cardTitle= item.title
+              else
+                title.cardTitle= item.seriesTitle
+
+              //- We make an empty title and give it a height to add
+              //- slightly more padding between the shelves
+              title.shelfSpacer= ' '
+

@@ -12,21 +12,7 @@ document
 
     collectionList
 
-      carousel
-        section
-          each item in carousels[1].episodes
-            lockup(route='/' + item.href)
-              img.carouselImage(src=item.thumbnail width="1500" height="600")
-
-              overlay
-                if item.title
-                  title.carouselSubtitle= item.seriesTitle
-                  title.carouselTitle= item.title
-                else
-                  title.carouselTitle= item.seriesTitle
-
-
-      each shelf in collections
+      each shelf in index
         shelf.shelf
           header
             title= shelf.title
