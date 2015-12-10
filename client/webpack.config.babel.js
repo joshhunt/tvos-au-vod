@@ -1,6 +1,7 @@
 import http from 'http';
 import path from 'path';
 import nodeStatic from 'node-static';
+import webpack from 'webpack';
 
 const port = 8123;
 const root = path.resolve(__dirname);
@@ -63,6 +64,7 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.BannerPlugin('var _globals = _globals || {};', { raw: true }),
     function () {
       this.plugin('compile', () => io.emit('compile'));
       this.plugin('done', () => io.emit('live-reload'));
@@ -86,9 +88,3 @@ server.listen(port, () => {
 
 io = require('socket.io')(server);
 io.serveClient(false);
-
-io.on('connection', (socket) => {
-  console.log('[livereload] Client connected');
-
-  socket.on('disconnect', () => console.log('[livereload] Client disconnected'));
-});

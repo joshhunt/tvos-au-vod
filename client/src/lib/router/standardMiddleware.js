@@ -10,11 +10,20 @@ function presentDocument(doc) {
   doc.addEventListener('select', routeEventListener);
   doc.addEventListener('play', routeEventListener);
 
+  // Set the route's context on the document so we can look it up later via navigationDocument
+  // This is the only reliable way to get the current path
+  doc[PRIVATE] = { context: this.context };
+
   // If this was bound with menuFeature, it must mean presentDocument has
   // been called to show a menu item. Otherwise, just push the document
   // into the nav stack
   if (this.menuFeature) {
     this.menuFeature.setDocument(doc, this.menuItem);
+
+    // We need an easy way to determin which menuItem is active, so we have
+    // to resort to setting it ourself on the menuFeature. This is used later
+    // by getCurrentRoute()
+    this.menuFeature[PRIVATE] = { currentMenuItem: this.menuItem };
   } else {
     navigationDocument.pushDocument(doc);
   }
@@ -22,7 +31,7 @@ function presentDocument(doc) {
 
 // We use this to add extra data and fields directly onto the ctx object
 export default function standardMiddleware(ctx, next) {
-  ctx.present = presentDocument.bind({});
+  ctx.present = presentDocument.bind({ context: ctx });
 
   // Add the event (if it exists)
   if (ctx.state[PRIVATE]) {
@@ -35,7 +44,7 @@ export default function standardMiddleware(ctx, next) {
   if (ctx.event && ctx.event.target.nodeName === MENU_ITEM) {
     const menuItem = ctx.event.target;
     const menuFeature = menuItem.parentNode.getFeature('MenuBarDocument');
-    ctx.present = presentDocument.bind({ menuItem, menuFeature });
+    ctx.present = presentDocument.bind({ menuItem, menuFeature, context: ctx });
   }
 
   next();

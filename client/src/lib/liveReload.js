@@ -1,12 +1,12 @@
 /* globals App */
 
 import io from 'socket.io-client';
-import * as router from './router';
+import router from './router';
 
-function resume({ lastLocation }) {
-  if (!lastLocation) { return; }
+function resume({ lastRoute }) {
+  if (!lastRoute) { return; }
 
-  router.goTo(lastLocation);
+  router.goTo(lastRoute);
 }
 
 export default function connect(launchOptions = {}) {
@@ -16,7 +16,7 @@ export default function connect(launchOptions = {}) {
   socket.on('compile', () => console.debug('Live reload: compiling, prepare for reload'));
 
   socket.on('live-reload', () => {
-    App.reload({ when: 'now' }, { lastLocation: router.currentLocation });
+    App.reload({ when: 'now' }, { lastRoute: router.getCurrentRoute() });
   });
 
   if (launchOptions.reloadData) {
