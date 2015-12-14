@@ -8,12 +8,14 @@ import categoriesTemplate from './categories/template.tvml.jade';
 import allShowsTemplate from './allShows/template.tvml.jade';
 
 import episodeView from './episode';
+import playerView from './player';
 
 router('/', genericView({ template: menuTemplate }));
 router('/home', genericView({ template: homeTemplate, endpoint: 'home' }));
 router('/categories', genericView({ template: categoriesTemplate, endpoint: 'category' }));
 router('/allShows', genericView({ template: allShowsTemplate, endpoint: 'index' }));
 router('/programs/:programSlug/:episodeNumber', episodeView);
+router('/_player', playerView);
 
 router('*', (ctx) => {
   console.log('...404 for route', ctx.path);
